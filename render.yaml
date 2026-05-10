@@ -1,0 +1,74 @@
+services:
+  - type: web
+    name: elise-content-os-web
+    runtime: python
+    rootDir: elise-content-os
+    plan: starter
+    buildCommand: pip install -r requirements.txt
+    preDeployCommand: alembic upgrade head && python -m app.cli seed
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars: &elise_env
+      - key: APP_ENV
+        value: production
+      - key: TZ
+        value: Asia/Dubai
+      - key: OPENAI_MODEL
+        value: gpt-5.4-mini
+      - key: OPENAI_FALLBACK_MODEL
+        value: gpt-5.4-nano
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: DATABASE_URL
+        sync: false
+      - key: DATABASE_URL_DIRECT
+        sync: false
+      - key: TELEGRAM_BOT_TOKEN
+        sync: false
+      - key: TELEGRAM_CHAT_ID
+        sync: false
+      - key: TELEGRAM_WEBHOOK_SECRET
+        sync: false
+      - key: APP_BASE_URL
+        sync: false
+      - key: INTERNAL_TRIGGER_TOKEN
+        sync: false
+
+  - type: cron
+    name: elise-content-os-morning
+    runtime: python
+    rootDir: elise-content-os
+    plan: starter
+    schedule: "0 3 * * *"
+    buildCommand: pip install -r requirements.txt
+    startCommand: python -m app.cli trigger morning
+    envVars: *elise_env
+
+  - type: cron
+    name: elise-content-os-afternoon
+    runtime: python
+    rootDir: elise-content-os
+    plan: starter
+    schedule: "0 9 * * *"
+    buildCommand: pip install -r requirements.txt
+    startCommand: python -m app.cli trigger afternoon
+    envVars: *elise_env
+
+  - type: cron
+    name: elise-content-os-evening
+    runtime: python
+    rootDir: elise-content-os
+    plan: starter
+    schedule: "30 15 * * *"
+    buildCommand: pip install -r requirements.txt
+    startCommand: python -m app.cli trigger evening
+    envVars: *elise_env
+
+  - type: cron
+    name: elise-content-os-weekly-review
+    runtime: python
+    rootDir: elise-content-os
+    plan: starter
+    schedule: "0 5 * * 1"
+    buildCommand: pip install -r requirements.txt
+    startCommand: python -m app.cli weekly-review
+    envVars: *elise_env
