@@ -1,0 +1,41 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Virtual environments
+.venv/
+venv/
+
+# Local configuration and credentials
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*service-account*.json
+*credentials*.json
+
+# Local data and runtime artifacts
+*.db
+*.sqlite
+*.sqlite3
+*.log
+logs/
+
+# Generated/private dataset media
+elise-content-os/data/seed/dataset/**/*.jpg
+elise-content-os/data/seed/dataset/**/*.jpeg
+elise-content-os/data/seed/dataset/**/*.png
+elise-content-os/data/seed/dataset/**/*.webp
+
+# Editors and operating systems
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db

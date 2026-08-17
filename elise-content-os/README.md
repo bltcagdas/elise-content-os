@@ -1,6 +1,19 @@
-# Elise Verne Content OS
+# Development and Operations
 
-FastAPI service for the Elise Verne semi-automated content workflow.
+Local setup and deployment notes for the Elise Verne Content OS application. See the [repository README](../README.md) for the system architecture, workflow, and engineering overview.
+
+## Required knowledge inputs
+
+The public repository currently includes only `data/seed/brand_voice.md`. Before running the seed or planner commands, provide the other inputs in one of the paths supported by `KnowledgeLoader`:
+
+| Input | Preferred app path | Workspace fallback |
+| --- | --- | --- |
+| Character state | `data/seed/character_state.json` | `../character_state.json` |
+| Monthly tracker | `data/seed/monthly_tracker.md` | `../monthly_tracker.md` |
+| Scene JSON | `data/seed/scene_prompts.json` | `../elise_dataset/10_EliseVerneV1/elise_verne_prompts.json` |
+| Scene text dataset | `data/seed/dataset/` | `../EliseVerneV1/dataset/` |
+
+At least one scene source is required. Do not commit private datasets or production credentials merely to make local setup convenient.
 
 ## Local setup
 
@@ -15,9 +28,9 @@ python -m app.cli trigger morning --dry-run
 uvicorn app.main:app --reload
 ```
 
-## Production
+## Render deployment blueprint
 
-- Deploy with the root `render.yaml`.
+- The root `render.yaml` defines the repository's web and cron deployment blueprint; an active production deployment is not verifiable from this repository alone.
 - Set `DATABASE_URL` to the Neon pooled connection string.
 - Set `DATABASE_URL_DIRECT` to the Neon direct connection string for migrations.
 - Rotate/revoke any previously exposed OpenAI key before deploy.
